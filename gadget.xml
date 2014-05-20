@@ -24,16 +24,7 @@
     var scroll = prefs.getString('scroll');
     var height = 800;
     var width = 600;
-
-    if (gadgets.window) {
-      var viewport = gadgets.window.getViewportDimensions();
-      if (viewport.width) {
-        var width = viewport.width;
-      }
-      if (viewport.height) {
-        var height = viewport.height;
-      }
-    }
+ 
 
     var iframe = document.createElement('iframe');
     iframe.setAttribute('width', width + 'px');
@@ -42,7 +33,7 @@
     if(scroll){
       iframe.setAttribute('scrolling', scroll);
     }
-    iframe.setAttribute('src', 'http://www.ogogle.com');
+    iframe.setAttribute('src', 'http://www.sap.com');
 
     // set the slideshow to the placeholder div
     var dest = document.getElementById('dest');
