@@ -45,7 +45,8 @@
         var extractedText;
 
         listItem = document.createElement('LI'); 
-        listItem.appendChild("TESTING...");
+        var extTxt = document.createTextNode("TESTING!!!");
+        listItem.appendChild(extTxt);
         matchList.appendChild(listItem);
             
         <!-- Iterate through the array and display output for each match. -->
