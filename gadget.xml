@@ -13,8 +13,7 @@
     <EnumValue value="no" display_value="No"/>
     <EnumValue value="yes" display_value="Yes"/>
   </UserPref>
-  <Content type="html" view="default,canvas">
-  <div id='dest'><img src="http://www.google.com/ig/images/spinner.gif"></div>
+  <Content type="html" view="default,canvas"> 
   <script type="text/javascript">
   gadgets.util.registerOnLoadHandler(doRender);
 
@@ -43,7 +42,7 @@
     if(scroll){
       iframe.setAttribute('scrolling', scroll);
     }
-    iframe.setAttribute('src', iframeURL);
+    iframe.setAttribute('src', 'http://www.ogogle.com');
 
     // set the slideshow to the placeholder div
     var dest = document.getElementById('dest');
