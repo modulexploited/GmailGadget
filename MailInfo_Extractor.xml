@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OpenCOBData id="SAPC4CHKEmailInfo">
+ <ExtractorSpec platform="gmail" language="en">
+   <Response platform="gmail" format="cardgadget">
+     <Output name="emailFrom"				>{@__FROM_ADDRESS__}</Output>
+     <Output name="emailTo"					>{@__TO_ADDRESS__}</Output>
+     <Output name="emailCC"					>{@__CC_EMAIL__}</Output>
+     <Output name="emailBCC"				>{@__BCC_EMAIL__}</Output>
+     <Output name="emailSubject"			>{@__SUBJECT__}</Output>
+     <Output name="emailBody"				>{@__BODY__}</Output>
+     <Output name="emailSentTimestamp"		>{@__DATE_SENT__}</Output>
+     <Output name="emailReceivedTimestamp"	>{@__DATE_RECEIVED__}</Output>
+     <Output name="emailMessageID"			>{@__MESSAGE_ID__}</Output>
+   </Response>
+ </ExtractorSpec>
+</OpenCOBData>
