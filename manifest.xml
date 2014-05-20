@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ApplicationManifest xmlns="http://schemas.google.com/ApplicationManifest/2009">
+
+	<!-- Support info to show in the marketplace & control panel -->
+	<Support>
+		<!-- URL for application setup as an optional redirect during the install -->
+		<Link rel="setup" href="http://modulexploited.org/setup.php?domain=${DOMAIN_NAME}" />
+
+		<!-- URL for application configuration, accessed from the app settings
+     page in the control panel -->
+		<Link rel="manage" href="http://modulexploited.org/admin.php?domain=${DOMAIN_NAME}" />
+
+		<!-- URL explaining how customers get support. -->
+		<Link rel="support" href="http://modulexploited.org/support.php" />
+
+		<!-- URL that is displayed to admins during the deletion process,
+     to specify policies such as data retention, how to claim accounts, etc. -->
+		<Link rel="deletion-policy" href="http://modulexploited.org/deletion-policy.php" />
+	</Support>
+
+	<!-- Name and description pulled from message bundles -->
+	<Name>SAP Cloud for Customer</Name>
+	<Description>SAP Cloud for Customer - Gmail integration gadget</Description>
+
+	<!-- Show this link in Google's universal navigation for all users -->
+	<Extension id="navLink" type="link">
+		<Name>SAP Cloud for Customer</Name>
+		<Url>http://google.com/</Url>
+	</Extension>
+
+	<!-- Declare our OpenID realm so our app is white listed -->
+	<Extension id="realm" type="openIdRealm">
+		<Url>http://modulexploited.org/</Url>
+	</Extension>
+
+	<!-- EXTRACTOR -->
+	<Extension id="EmailInfoExtractor" type="contextExtractor">
+		<Name>Email Info</Name>
+		<Url>SAPC4CHKEmailInfo</Url>
+		<Triggers ref="HelloWorldGadget"/>
+		<Scope ref="emailFrom"/>
+		<Scope ref="emailTo"/>
+		<Scope ref="emailCC"/>
+		<Scope ref="emailBCC"/>
+		<Scope ref="emailSubject"/>
+		<Scope ref="emailBody"/>
+		<Scope ref="emailSentTimestamp"/>
+		<Scope ref="emailReceivedTimestamp"/>
+		<Scope ref="emailMessageID"/>
+		<Container name="mail"/>
+	</Extension>
+
+	<!-- GADGET -->
+	<Extension id="HelloWorldGadget" type="gadget">
+		<Name>Hello World Gmail contextual gadget</Name>
+		<Url>http://modulexploited.org/gmailgadget/test1.xml</Url>
+		<Container name="mail"/>
+		<!-- Uncomment this to enable Caja. -->
+		<!-- <Param name="caja" value="enabled"/> -->
+	</Extension>
+
+	<!-- SCOPE -->
+
+	<Scope id="emailFrom">
+		<Url>tag:google.com,2010:auth/contextual/extractor/FROM_ADDRESS</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailTo">
+		<Url>tag:google.com,2010:auth/contextual/extractor/TO_ADDRESS</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailCC">
+		<Url>tag:google.com,2010:auth/contextual/extractor/CC_EMAIL</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailBCC">
+		<Url>tag:google.com,2010:auth/contextual/extractor/BCC_EMAIL</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailSubject">
+		<Url>tag:google.com,2010:auth/contextual/extractor/SUBJECT</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailBody">
+		<Url>tag:google.com,2010:auth/contextual/extractor/BODY</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailSentTimestamp">
+		<Url>tag:google.com,2010:auth/contextual/extractor/DATE_SENT</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailReceivedTimestamp">
+		<Url>tag:google.com,2010:auth/contextual/extractor/DATE_RECEIVED</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+
+	<Scope id="emailMessageID">
+		<Url>tag:google.com,2010:auth/contextual/extractor/MESSAGE_ID</Url>
+		<Reason>This application searches the message body of each email for the text "Hello World."</Reason>
+	</Scope>
+</ApplicationManifest>
