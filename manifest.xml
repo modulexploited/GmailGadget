@@ -36,8 +36,8 @@
 	<!-- EXTRACTOR -->
 	<Extension id="EmailInfoExtractor" type="contextExtractor">
 		<Name>Email Info</Name>
-		<Url>SAPC4CHKEmailInfo</Url>
-		<Triggers ref="HelloWorldGadget"/>
+		<Url>SAPC4CHKEmailInfoDev</Url>
+		<Triggers ref="SAPC4CGadget"/>
 		<Scope ref="emailFrom"/>
 		<Scope ref="emailTo"/>
 		<Scope ref="emailCC"/>
@@ -51,9 +51,9 @@
 	</Extension>
 
 	<!-- GADGET -->
-	<Extension id="HelloWorldGadget" type="gadget">
-		<Name>Hello World Gmail contextual gadget</Name>
-		<Url>https://raw.githubusercontent.com/modulexploited/GmailGadget/master/gadget.xml?version=9</Url>
+	<Extension id="SAPC4CGadget" type="gadget">
+		<Name>Gmail contextual gadget - SAP Cloud for Customer</Name>
+		<Url>https://raw.githubusercontent.com/modulexploited/GmailGadget/master/gadget.xml?version=13</Url>
 		<Container name="mail"/>
 		<!-- Uncomment this to enable Caja. -->
 		<!-- <Param name="caja" value="enabled"/> -->
