@@ -42,7 +42,7 @@
 		data-sap-ui-xx-test-mobile="true"
 		data-sap-ui-xx-bindingSyntax="complex"
 		data-sap-ui-compatVersion="1.18"
-		data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "https://axp-cust220.dev.sapbydesign.com/sap/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/"}'>
+		data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/"}'>
 	</script>
 
       <!-- Application launch configuration -->
@@ -53,6 +53,11 @@
 		      var oModel = new sap.ui.model.json.JSONModel();
 		      oModel.setData("https://axp-cust220.dev.sapbydesign.com");
 		      sap.ui.getCore().setModel(oModel,"SERVER");
+		      
+		      if (gadgets && gadgets.window && gadgets.window.adjustHeight) {
+			gadgets.window.adjustHeight(300);
+			$("body").css("overflow","hidden").css("overflow-y","hidden").css("overflow-x","hidden");
+		      }
 		
 		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
 			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
