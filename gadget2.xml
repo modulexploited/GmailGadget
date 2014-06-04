@@ -34,32 +34,56 @@
    "html" and "card" are required for all Gmail contextual gadgets. -->
   <Content type="html" view="card">
     <![CDATA[
-      <!-- Start with Single Sign-On -->
-      <!-- <script type="text/javascript" src="https://example.com/gadgets/sso.js"></script> -->
+      <script id="sap-ui-bootstrap" type="text/javascript"
+	      src="https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js"
+	      data-sap-ui-libs="sap.client.cod.newui.shared"
+	      data-sap-ui-theme="sap_bluecrystal"
+	      data-sap-ui-preload="sync"
+	      data-sap-ui-xx-test-mobile="true"
+	      data-sap-ui-xx-bindingSyntax="complex"
+	      data-sap-ui-compatVersion="1.18"
+	      data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "./"}'>
+      </script>
+
+      <!-- Application launch configuration -->
       <script type="text/javascript">
-
-        <!-- Fetch the array of content matches. -->
-        matches = google.contentmatch.getContentMatches();
-        var matchList = document.createElement('UL');
-        var listItem;
-        var extractedText;
-
-        listItem = document.createElement('LI'); 
-        var extTxt = document.createTextNode("TESTING 1!!!");
-        listItem.appendChild(extTxt);
-        matchList.appendChild(listItem);
-            
-        <!-- Iterate through the array and display output for each match. -->
-        for (var match in matches) {
-          for (var key in matches[match]) {
-            listItem = document.createElement('LI');
-            extractedText = document.createTextNode(key + ": " + matches[match][key]);
-            listItem.appendChild(extractedText);
-            matchList.appendChild(listItem);
-          }
-        }
-        document.body.appendChild(matchList);
-        gadgets.window.adjustHeight(100);
+	
+	      sap.ui.getCore().attachInitEvent(function() {
+		      jQuery.sap.require("sap.client.cod.newui.shared.js.utils");
+		      sap.client.cod.newui.shared.Utils.initBasedOnUrlConfig();
+		
+		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
+			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
+			      view.placeAt("content");
+		      }).fail(function(d){
+			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.login"});
+			      view.placeAt("content");
+			      var xsrf;
+			      if (d && typeof(d) === "object" && (xsrf = $(d).find("Element[name='sap-login-XSRF']").attr("value"))) {
+  				    view.getController().setLogonHandler(function(){
+  	  				  view.getModel().getData()["sap-login-XSRF"] = xsrf;
+  		  			  sap.client.cod.newui.shared.Utils.login(view.getModel().getData()).done(function(){
+  			  			view.destroy();
+  				  		$("body").empty();
+  					  	  var view2 = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
+  						    view2.placeAt("content");
+  						    //replace
+  					    }).fail(function(d){
+  						    var text;
+  						    if (d && typeof(d) === "object" && (text = $(d).find("Message[type='error']").attr("text"))) {
+  							  view.getModel().getData()["error"] = text;
+  							  view.getModel().setData(view.getModel().getData());
+  						  }
+  						  //show error message
+					     });
+				      });
+      			} else {
+      				console.log("error");
+      			}
+			
+		      });
+		
+	      });
       </script>
     ]]>
   </Content>
