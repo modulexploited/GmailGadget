@@ -53,7 +53,7 @@
 	<!-- GADGET -->
 	<Extension id="SAPC4CGadget" type="gadget">
 		<Name>Gmail contextual gadget - SAP Cloud for Customer</Name>
-		<Url>https://raw.githubusercontent.com/modulexploited/GmailGadget/master/gadget2.xml?version=5</Url>
+		<Url>https://raw.githubusercontent.com/modulexploited/GmailGadget/master/gadget2.xml?version=6</Url>
 		<Container name="mail"/>
 		<!-- Uncomment this to enable Caja. -->
 		<!-- <Param name="caja" value="enabled"/> -->
