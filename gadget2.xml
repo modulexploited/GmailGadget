@@ -50,7 +50,9 @@
 	
 	      sap.ui.getCore().attachInitEvent(function() {
 		      jQuery.sap.require("sap.client.cod.newui.shared.js.utils");
-		      sap.client.cod.newui.shared.Utils.initBasedOnUrlConfig();
+		      var oModel = new sap.ui.model.json.JSONModel();
+		      oModel.setData("https://axp-cust220.dev.sapbydesign.com");
+		      sap.ui.getCore().setModel(oModel,"SERVER");
 		
 		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
 			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
