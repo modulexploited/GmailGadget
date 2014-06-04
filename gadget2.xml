@@ -35,15 +35,15 @@
   <Content type="html" view="card">
     <![CDATA[
       <script id="sap-ui-bootstrap" type="text/javascript"
-	      src="https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js"
-	      data-sap-ui-libs="sap.client.cod.newui.shared"
-	      data-sap-ui-theme="sap_bluecrystal"
-	      data-sap-ui-preload="sync"
-	      data-sap-ui-xx-test-mobile="true"
-	      data-sap-ui-xx-bindingSyntax="complex"
-	      data-sap-ui-compatVersion="1.18"
-	      data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "./"}'>
-      </script>
+	src="https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js"
+		data-sap-ui-libs="sap.client.cod.newui.shared"
+		data-sap-ui-theme="sap_bluecrystal"
+		data-sap-ui-preload="sync"
+		data-sap-ui-xx-test-mobile="true"
+		data-sap-ui-xx-bindingSyntax="complex"
+		data-sap-ui-compatVersion="1.18"
+		data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "https://axp-cust220.dev.sapbydesign.com/sap/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/"}'>
+	</script>
 
       <!-- Application launch configuration -->
       <script type="text/javascript">
