@@ -58,6 +58,17 @@
 			gadgets.window.adjustHeight(300);
 			$("body").css("overflow","hidden").css("overflow-y","hidden").css("overflow-x","hidden");
 		      }
+		      
+		      var dialog = new sap.m.SelectDialog({
+			title:"title",
+			multiSelect:true,
+			});
+		      var model = new sap.ui.model.json.JSONModel();
+		      model.setData([{test:"test"}
+			               ]);
+		      dialog.bindAggregation("items", "/", new sap.m.ObjectListItem({tooltip:"{test}", title:"{test}"}));
+		      dialog.setModel(model);
+		      dialog.open();
 		
 		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
 			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
