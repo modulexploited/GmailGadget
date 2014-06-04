@@ -56,10 +56,10 @@
 		
 		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
 			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
-			      view.placeAt("content");
+			      view.placeAt($("body")[0]);
 		      }).fail(function(d){
 			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.login"});
-			      view.placeAt("content");
+			      view.placeAt($("body")[0]);
 			      var xsrf;
 			      if (d && typeof(d) === "object" && (xsrf = $(d).find("Element[name='sap-login-XSRF']").attr("value"))) {
   				    view.getController().setLogonHandler(function(){
@@ -68,7 +68,7 @@
   			  			view.destroy();
   				  		$("body").empty();
   					  	  var view2 = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
-  						    view2.placeAt("content");
+  						    view2.placeAt($("body")[0]);
   						    //replace
   					    }).fail(function(d){
   						    var text;
