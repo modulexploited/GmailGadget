@@ -34,16 +34,33 @@
    "html" and "card" are required for all Gmail contextual gadgets. -->
   <Content type="html" view="card">
     <![CDATA[
-      <script id="sap-ui-bootstrap" type="text/javascript"
-	src="https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js"
-		data-sap-ui-libs="sap.client.cod.newui.shared, sap.m"
-		data-sap-ui-theme="sap_bluecrystal"
-		data-sap-ui-preload="sync"
-		data-sap-ui-xx-test-mobile="true"
-		data-sap-ui-xx-bindingSyntax="complex"
-		data-sap-ui-compatVersion="1.18"
-		data-sap-ui-resourceroots='{"sap.client.cod.newui.shared": "https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/"}'>
-	</script>
+       <script type="text/javascript">
+		var url;
+		var urlShared;
+		if (window.gadgets) {
+			url = window.gadgets.io.getProxyUrl("https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js");
+			urlShared = window.gadgets.io.getProxyUrl("https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/");
+		} else if (document.location.host.indexOf("localhost") >=0 && document.location.pathname.split("/")[1] == "application"){
+			var base = "http://localhost:8080/application/proxy/https/";
+			url = base+"axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js";
+			urlShared = base+"axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/";
+		} else if (document.location.host.indexOf("localhost") >=0){
+			url = "/%24%7BpomMap.artifactId.getValue%28%29%7D/resources/sap-ui-core.js";
+			urlShared = "../shared";
+		} else {
+			url = "https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js";
+			urlShared = "https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/";
+		}
+		
+		document.write("<script id='sap-ui-bootstrap' type='text/javascript'");
+		document.write("src='"+url+"'");
+		document.write("data-sap-ui-libs='sap.client.cod.newui.shared, sap.m'");
+		document.write("data-sap-ui-theme='sap_bluecrystal'");
+		document.write("data-sap-ui-xx-bindingSyntax='complex'");
+		document.write("data-sap-ui-compatVersion='1.18'");
+		document.write("data-sap-ui-resourceroots='{\"sap.client.cod.newui.shared\": \""+urlShared+"\"}'>");
+		document.write("<\/script>");
+       </script>
 
       <!-- Application launch configuration -->
       <script type="text/javascript">
