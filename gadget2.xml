@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="SAP Cloud for Customer (27)"
+  <ModulePrefs title="SAP Cloud for Customer (28)"
     description="Gmail integration gadget"
     height="20"
     author="Harsha Krishnareddy"
@@ -38,6 +38,7 @@
       <!-- Application launch configuration -->
       <script type="text/javascript">
 		var test = new XMLHttpRequest();
+		test.setRequestHeader("x-sap-request-xsrf","X");
 		test.open("GET","https://axp-cust220.dev.sapbydesign.com/sap/ap/ui/login?saml2=disabled");
 		test.send();
 	      sap.ui.getCore().attachInitEvent(function() {
