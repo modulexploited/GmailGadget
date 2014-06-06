@@ -66,48 +66,152 @@
       <script type="text/javascript">
 	
 	      sap.ui.getCore().attachInitEvent(function() {
-		      jQuery.sap.require("sap.client.cod.newui.shared.js.utils");
-		      var oModel = new sap.ui.model.json.JSONModel();
-		      oModel.setData("https://axp-cust220.dev.sapbydesign.com");
-		      sap.ui.getCore().setModel(oModel,"SERVER");
-		      
-		      if (gadgets && gadgets.window && gadgets.window.adjustHeight) {
-			gadgets.window.adjustHeight(300);
-			$("body").css("overflow","hidden").css("overflow-y","hidden").css("overflow-x","hidden");
-		      }
+		jQuery.sap.require("sap.client.cod.newui.shared.js.utils");
 		
-		      sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
-			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
-			      view.placeAt($("body")[0]);
-		      }).fail(function(d){
-			      var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.login"});
-			      view.placeAt($("body")[0]);
-			      var xsrf;
-			      if (d && typeof(d) === "object" && (xsrf = $(d).find("Element[name='sap-login-XSRF']").attr("value"))) {
-  				    view.getController().setLogonHandler(function(){
-  	  				  view.getModel().getData()["sap-login-XSRF"] = xsrf;
-  		  			  sap.client.cod.newui.shared.Utils.login(view.getModel().getData()).done(function(){
-  			  			view.destroy();
-  				  		$("body").empty();
-  					  	  var view2 = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
-  						    view2.placeAt($("body")[0]);
-  						    //replace
-  					    }).fail(function(d){
-  						    var text;
-  						    if (d && typeof(d) === "object" && (text = $(d).find("Message[type='error']").attr("text"))) {
-  							  view.getModel().getData()["error"] = text;
-  							  view.getModel().setData(view.getModel().getData());
-  						  }
-  						  //show error message
-					     });
-				      });
-      			} else {
-      				console.log("error");
-      			}
+		sap.client.cod.newui.shared.Utils.convertOptions = function(options) {
+			var goptions = {};
+			goptions.METHOD = options.type;
+			goptions.CONTENT_TYPE = options.dataType;
+			goptions.HEADERS = options.headers;
+			goptions.POST_DATA = options.data;
+			return goptions;
+		};
+		sap.client.cod.newui.shared.Utils.getLoginURL = function() {
+			var sessionId = sap.ui.getCore().getModel("SESSION_ID") ? sap.ui.getCore().getModel("SESSION_ID").getData() : null;
+			var base = sap.client.cod.newui.shared.Utils.isProxyEnabled ? sap.client.cod.newui.shared.Utils.getBaseProxyURL() : sap.client.cod.newui.shared.Utils.getHost();
+			var url = sessionId ? "/sap("+sessionId+")/ap/ui/json" : "/sap/ap/ui/login?saml2=disabled";
+			return sap.client.cod.newui.shared.Utils.isLocalMode() ? base + url : url;
+		};
+		sap.client.cod.newui.shared.Utils.postTest = function(options) {
+			if (!window.gadgets) {
+				return $.ajax(options);
+			} else {
+				var deferred = $.deferred;
+				window.gadgets.io.makeRequest(options.url,function(d){
+					if (d.headers && d.headers["set-cookie"]) {
+						d.headers["set-cookie"].forEach(function(c){
+							document.cookie = c;
+						});
+					}
+					var dbe = "throw 1; <dont be evil>";
+					if (d && d.indexOf(dbe)>=0) {
+						d.substring(bleh.indexOf(dbe)+dbe.length);
+					}
+					var data = d.text;
+					try {
+						data = jQuery.parseXML(d.text);
+					} catch (e){
+						try {
+							data = JSON.parse(d.text);
+						} catch (e) {}
+					}
+					
+					var xhr = {
+							getResponseHeader:function(name){
+								return d && d.headers ? d.headers[name] : null;
+							}};
+					
+					deferred.resolve(data, data.text, xhr);
+				},sap.client.cod.newui.shared.Utils.convertOptions(options));
+				return deferred;
+			}
+		};
+		sap.client.cod.newui.shared.Utils.isLoggedIn = function(){
+			var deferred = $.Deferred();
 			
-		      });
+			sap.client.cod.newui.shared.Utils.postTest({
+				url: sap.client.cod.newui.shared.Utils.getLoginURL(),
+				headers : {"x-sap-request-xsrf":"X"},
+				type: "POST",
+			}).pipe(function(d){
+				return (d && typeof(d) ==="string" && d.indexOf("state=authenticated")>=0)? $.Deferred().resolve(d).promise() : $.Deferred().reject(d).promise();
+			}).done(function(d){
+				deferred.resolve(d);
+			}).fail(function(d){
+				deferred.reject(d);
+			});
+			
+			return deferred;
+		};
+		sap.client.cod.newui.shared.Utils.login = function(data) {
+			var that = this;
+			var deferred = $.Deferred();
+			
+			sap.client.cod.newui.shared.Utils.postTest({
+				url: sap.client.cod.newui.shared.Utils.getLoginURL(),
+				type: "POST",
+				headers : {"x-sap-request-xsrf":"X"},
+				data: data,
+			}).pipe(function(d){
+				return !d || (d && typeof(d) === "object" && $(d).find("Message[type='error']").attr("text")) ? $.Deferred().reject(d).promise() : $.Deferred().resolve(d).promise();
+			}).done(function(d){
+				//do another request to retrieve xsrf
+				sap.client.cod.newui.shared.Utils.postOptions({
+					url: that.getLoginURL()+"&sap-client="+data["sap-client"]+"&sap-language="+data["sap-language"],
+					type: "POST",
+					headers : {"x-sap-request-xsrf":"X"},
+				}).done(function(o,ts,xhr){
+					var model = new sap.ui.model.json.JSONModel();
+					sap.ui.getCore().setModel(model,"xsrf");
+					model.setData(xhr.getResponseHeader("sap-xsrf"));
+					deferred.resolve(d);
+				}).fail(function(d){
+					deferred.resolve(d);
+				});
+			}).fail(function(d){
+				deferred.reject(d);
+			});
+			
+			return deferred;
+		};
 		
-	      });
+		
+		var oModel = new sap.ui.model.json.JSONModel();
+		oModel.setData("https://axp-cust220.dev.sapbydesign.com");
+		sap.ui.getCore().setModel(oModel,"SERVER");
+		
+		if (window.gadgets && window.gadgets.window && window.gadgets.window.adjustHeight) {
+			window.gadgets.window.adjustHeight(300);
+			$("body").css("overflow","hidden").css("overflow-y","hidden").css("overflow-x","hidden");
+		}
+		
+		sap.client.cod.newui.shared.Utils.isLoggedIn().done(function(){
+			var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
+			view.placeAt($("body")[0]);
+		}).fail(function(d){
+			var view = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.login"});
+			view.placeAt($("body")[0]);
+			var xsrf;
+			if (d && typeof(d) === "object" && (xsrf = $(d).find("Element[name='sap-login-XSRF']").attr("value"))) {
+				view.getController().setLogonHandler(function(){
+					view.getModel().getData()["sap-login-XSRF"] = xsrf;
+					sap.client.cod.newui.shared.Utils.login(view.getModel().getData()).done(function(){
+						view.destroy();
+						$("body").empty();
+						var view2 = sap.ui.view({type:sap.ui.core.mvc.ViewType.XML, viewName:"sap.client.cod.newui.shared.view.plugin"});
+						view2.placeAt($("body")[0]);
+						//replace
+					}).fail(function(d){
+						var text;
+						if (d && typeof(d) === "object" && (text = $(d).find("Message[type='error']").attr("text"))) {
+							view.getModel().getData()["error"] = text;
+							view.getModel().setData(view.getModel().getData());
+						}
+						//show error message
+					});
+				});
+			} else {
+				console.log("error");
+			}
+			
+		});
+		
+		
+		
+		
+		
+		
+	});
       </script>
     ]]>
   </Content>
