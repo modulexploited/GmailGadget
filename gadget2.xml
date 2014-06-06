@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="SAP Cloud for Customer (23)"
+  <ModulePrefs title="SAP Cloud for Customer (24)"
     description="Gmail integration gadget"
     height="20"
     author="Harsha Krishnareddy"
@@ -38,8 +38,8 @@
 		var url;
 		var urlShared;
 		if (window.gadgets) {
-			url = window.gadgets.io.getProxyUrl("https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js");
-			urlShared = window.gadgets.io.getProxyUrl("https://axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/");
+			url = window.gadgets.io.getProxyUrl("https://my305250.crm.ondemand.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js");
+			urlShared = window.gadgets.io.getProxyUrl("https://my305250.crm.ondemand.com/sap/public/ap/ui/repository/BYD_COD/Runtime/HTML/resources/sap/client/cod/newui/shared/");
 		} else if (document.location.host.indexOf("localhost") >=0 && document.location.pathname.split("/")[1] == "application"){
 			var base = "http://localhost:8080/application/proxy/https/";
 			url = base+"axp-cust220.dev.sapbydesign.com/sap/public/ap/ui/repository/SAP_BYD_UI/HTML5/resources/sap-ui-core.js";
